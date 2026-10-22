@@ -1,0 +1,34 @@
+name: Secret Santa
+# Also the app image's tag: the Dockerfile builds FROM ghcr.io/yozko/secretsanta:<version>.
+version: "0.1.2"
+slug: secretsanta
+description: Family Secret Santa with personal links and fair draws, published through Tailscale Funnel.
+url: https://github.com/Yozko/ha-addons/tree/main/secretsanta
+arch:
+  - aarch64
+  - amd64
+startup: application
+boot: auto
+# Lets run.sh send Home Assistant notifications about Tailscale updates and problems.
+homeassistant_api: true
+ports:
+  3001/tcp: 3001
+  3000/tcp: null
+ports_description:
+  3001/tcp: Admin pages (keep this on the local network only)
+  3000/tcp: Participant pages (normally only through the Tailscale Funnel; leave empty)
+watchdog: tcp://[HOST]:[PORT:3001]
+options:
+  admin_password: ""
+  tailscale_auth_key: ""
+  tailscale_hostname: santa
+  public_url: ""
+  notify_service: ""
+  notify_webhook_url: ""
+schema:
+  admin_password: password
+  tailscale_auth_key: password?
+  tailscale_hostname: match(^[a-z0-9][a-z0-9-]{0,62}$)
+  public_url: url?
+  notify_service: str?
+  notify_webhook_url: url?
