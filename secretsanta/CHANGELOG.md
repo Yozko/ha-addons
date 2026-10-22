@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+- web: new links sign out old devices; not-found page leads home; ✏️ rename icons
+
 ## 0.1.3
 
 - web: participant pages show this year, clearer device saving, paste-a-link field

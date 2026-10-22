@@ -1,4 +1,4 @@
 # The Secret Santa app image this add-on is built on. The SecretSanta release
 # workflow updates it (and the add-on's version) after each app release.
 args:
-  APP_VERSION: "0.1.3"
+  APP_VERSION: "0.2.0"
