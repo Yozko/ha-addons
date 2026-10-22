@@ -1,7 +1,7 @@
-# Home Assistant passes the add-on's version as BUILD_VERSION, so bumping
-# `version` in config.yaml is all it takes to move to a new app release.
-ARG BUILD_VERSION
-FROM ghcr.io/yozko/secretsanta:${BUILD_VERSION}
+# The app image's version comes from build.yaml (APP_VERSION), so the add-on
+# can get its own fixes without a new app release.
+ARG APP_VERSION
+FROM ghcr.io/yozko/secretsanta:${APP_VERSION}
 
 USER root
 RUN apt-get update \

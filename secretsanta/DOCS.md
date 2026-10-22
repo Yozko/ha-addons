@@ -105,9 +105,13 @@ actions:
           message: Secret Santa did not come back after its weekly restart.
 ```
 
-## 6. Updating the app
+## 6. Updating
 
-Release a new app image (`npm version patch` and `npm run release` in the
-Secret Santa repository), wait for its build, then change `version` in this
-add-on's `config.yaml` to the same version and push. Home Assistant then
-offers the update.
+**App releases** (`npm version patch` and `npm run release` in the Secret
+Santa repository) update this add-on automatically once the image is built:
+the release workflow sets `APP_VERSION` in `build.yaml` and `version` in
+`config.yaml` to the new version. Home Assistant then offers the update.
+
+**Add-on-only changes** (run.sh, these docs): add a fourth number to
+`version` in `config.yaml` (0.1.2 → 0.1.2.1 → 0.1.2.2) and push. Home
+Assistant ranks 0.1.2.1 above 0.1.2 and below the next app release, 0.1.3.
