@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+- web: participant pages show this year, clearer device saving, paste-a-link field
+- web: admin links that can be shown and copied again, renaming, draw opens this year
+- web: fix form posts through the Tailscale Funnel; redirect stray addresses
+
 ## 0.1.2.1
 
 - Optional settings no longer need a value: an empty public_url was rejected
