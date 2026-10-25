@@ -105,11 +105,16 @@ ts funnel --bg 3000 >/dev/null
 dns=$(ts status --json | jq -r '.Self.DNSName // empty')
 public_url=$(opt public_url)
 public_url=${public_url:-https://${dns%.}}
-log "Participants: $public_url   Admin: http://<this device>:3001/admin (local network only)"
+
+# The admin pages over HTTPS, for devices on the tailnet only: Serve, not Funnel,
+# so port 8443 is never published on the internet.
+ts serve --bg --https=8443 http://127.0.0.1:3001 >/dev/null
+admin_url="https://${dns%.}:8443"
+log "Participants: $public_url   Admin: $admin_url/admin (devices on your tailnet only)"
 
 # --- 5. Start the app -----------------------------------------------------------
 export NODE_ENV=production PORT=3000 ADMIN_PORT=3001 DATA_DIR=/data/secretsanta TRUST_PROXY_LOOPBACK=1
-export PUBLIC_URL=$public_url
+export PUBLIC_URL=$public_url ADMIN_PUBLIC_URL=$admin_url
 export ADMIN_PASSWORD
 ADMIN_PASSWORD=$(opt admin_password)
 NOTIFY_WEBHOOK_URL=$(opt notify_webhook_url)

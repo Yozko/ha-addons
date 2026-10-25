@@ -3,7 +3,7 @@
 Family Secret Santa: every participant gets a personal link and sees only the
 person they give to. The participant pages are published on the internet
 through **Tailscale Funnel** from a separate Tailscale node (`santa`). The
-admin pages stay on your local network.
+admin pages are only reachable from devices on your tailnet, over HTTPS.
 
 ## 1. Tailscale (once)
 
@@ -22,7 +22,16 @@ In the [Tailscale admin console](https://login.tailscale.com/admin):
      { "target": ["tag:santa"], "attr": ["funnel"] },
    ],
    ```
-3. **Settings → Keys → Generate auth key:** *Pre-approved*, *Tags:
+3. **Admin access:** with the default policy (everyone in the tailnet may reach
+   everything), nothing to do. If your policy only allows what it lists, let
+   your own devices reach the admin port:
+
+   ```jsonc
+   "grants": [
+     { "src": ["autogroup:admin"], "dst": ["tag:santa"], "ip": ["tcp:8443"] },
+   ],
+   ```
+4. **Settings → Keys → Generate auth key:** *Pre-approved*, *Tags:
    `tag:santa`*, not reusable, not ephemeral. Copy the key.
 
 ## 2. Configuration
@@ -30,23 +39,25 @@ In the [Tailscale admin console](https://login.tailscale.com/admin):
 | Option | |
 | --- | --- |
 | `admin_password` | Password for the admin pages. Required. |
-| `tailscale_auth_key` | The key from step 1.3. Only needed for the first start; you can clear it afterwards. |
+| `tailscale_auth_key` | The key from step 1.4. Only needed for the first start; you can clear it afterwards. |
 | `tailscale_hostname` | Name of the Tailscale node, and so of the public address `https://<name>.<tailnet>.ts.net`. Default `santa`. |
 | `public_url` | Leave empty to use the Funnel address. Only set it if participants should use a different address. |
 | `notify_service` | A Home Assistant notify service, e.g. `mobile_app_my_phone`, for add-on problems: Tailscale updates, rollbacks, failed starts. |
 | `notify_webhook_url` | Where the app sends admin notifications (someone tried to sign in on too many devices). See section 4. |
 
-**Network:** port 3001 is the admin pages; keep it on the local network and
-never forward it in your router. Port 3000 (the participant pages) should stay
-empty: participants reach it through the Funnel.
+**Network:** leave both ports empty. Participants come in through the Funnel,
+and admin through Tailscale (below). Only if Tailscale is down and you need the
+admin pages, set port 3001 to reach them over plain http on your local network;
+empty it again afterwards, and never forward it in your router.
 
 Turn on **Watchdog** on the add-on's Info tab, so it is restarted if it stops.
 
 ## 3. Use
 
 - **Participants:** `https://santa.<tailnet>.ts.net` (shown in the add-on log at start).
-- **Admin:** `http://<home-assistant-address>:3001/admin` from your local network
-  (or over Tailscale to your Home Assistant).
+- **Admin:** `https://santa.<tailnet>.ts.net:8443/admin` from any device on your
+  tailnet (also shown in the add-on log). Sign in with `admin_password`; a sign-in
+  lasts 3 hours. From anywhere else the address doesn't answer.
 
 To move existing data in: export it where it is now (admin → Backup →
 Download export, or `npm run export`), then import it here under admin → Backup.

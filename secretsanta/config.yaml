@@ -12,13 +12,14 @@ startup: application
 boot: auto
 # Lets run.sh send Home Assistant notifications about Tailscale updates and problems.
 homeassistant_api: true
+# Both are off: participants use the Funnel, admin uses https over the tailnet.
+# Set 3001 only as a fallback for when Tailscale is down.
 ports:
-  3001/tcp: 3001
+  3001/tcp: null
   3000/tcp: null
 ports_description:
-  3001/tcp: Admin pages (keep this on the local network only)
+  3001/tcp: Admin pages over plain http on the local network (fallback only; normally empty)
   3000/tcp: Participant pages (normally only through the Tailscale Funnel; leave empty)
-watchdog: tcp://[HOST]:[PORT:3001]
 # Optional options have no default: Home Assistant rejects an empty value
 # where it expects a URL, but accepts a missing one.
 options:
