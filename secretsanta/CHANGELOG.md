@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3
+
+- web: admin link on the signed-out start page for tailnet visitors
+
 ## 0.2.2
 
 - web: admin link for tailnet visitors; login page links back to participants
