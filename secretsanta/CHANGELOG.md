@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4
+
+- web: saved family messages with copy buttons; links always shown
+
 ## 0.2.3
 
 - web: admin link on the signed-out start page for tailnet visitors
