@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- web: admin link for tailnet visitors; login page links back to participants
+
 ## 0.2.1
 
 - web: admin over HTTPS through Tailscale Serve; admin sign-in lasts 3 hours
